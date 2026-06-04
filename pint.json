@@ -1,0 +1,11 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "concat_space": {
+            "spacing": "one"
+        },
+        "spaces_inside_parentheses": {
+            "space": "single"
+        }
+    }
+}
