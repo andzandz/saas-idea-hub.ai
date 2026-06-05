@@ -101,7 +101,7 @@ export default function Welcome() {
                                     <span>
                                         Not serious enough to buy a
                                         <a
-                                            href="https://www.namecheap.com/domains/registration/results/?domain=thesaashub.ai"
+                                            href="https://www.namecheap.com/domains/registration/results/?domain=saasideahub.ai"
                                             target="_blank"
                                             className="ml-1 inline-flex items-center space-x-1 font-medium text-[#f53003] underline underline-offset-4 dark:text-[#FF4433]"
                                         >

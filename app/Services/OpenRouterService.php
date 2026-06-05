@@ -2,12 +2,8 @@
 
 namespace App\Services;
 
+use App\Clients\OpenRouterClient;
 use GuzzleHttp\Exception\GuzzleException;
-use MoeMizrak\LaravelOpenrouter\DTO\ChatData;
-use MoeMizrak\LaravelOpenrouter\DTO\MessageData;
-use MoeMizrak\LaravelOpenrouter\DTO\ResponseFormatData;
-use MoeMizrak\LaravelOpenrouter\Facades\LaravelOpenRouter;
-use MoeMizrak\LaravelOpenrouter\Types\RoleType;
 
 class OpenRouterService
 {
@@ -15,27 +11,21 @@ class OpenRouterService
      * @throws \ReflectionException
      * @throws GuzzleException
      */
-    public function generateSaaSIdea( string $idea, ?string $notes, string $model ): array
+    public function generateSaaSIdea( string $idea, ?string $notes, string $model, ?float $temperature ): array
     {
-        $chat_response = LaravelOpenRouter::chatRequest(
-            new ChatData(
-                messages: [
-                    new MessageData(
-                        content: 'Generate a SaaS startup idea for: ' . $idea,
-                        role: RoleType::USER,
-                    ),
-                ],
-                model: $model,
-                response_format: new ResponseFormatData(
-                    'json_schema',
-                    config( 'saas-generator.json_schema' )
-                )
-            )
-        );
+        $prompt = 'You are a SaaS (Software as a Service) Generator. Generate a startup name, summary (max 250 characters),'
+            . ' price tiers, fake testimonials and investor pitch (max 500 characters) for:'
+            . PHP_EOL . 'Idea: ' . $idea;
 
-        return json_decode(
-            $chat_response->choices[0]['message']['content'],
-            true
+        if ( ! empty( $notes ) ) {
+            $prompt .= PHP_EOL . 'Notes: ' . $notes;
+        }
+
+        return app( OpenRouterClient::class )->generateArrayWithSchema(
+            $prompt,
+            $model,
+            config( 'saas-generator.json_schema' ),
+            $temperature
         );
     }
 }

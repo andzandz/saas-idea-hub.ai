@@ -7,7 +7,7 @@ return [
         'schema' => [
             'type' => 'object',
             'additionalProperties' => false,
-            'required' => ['startup_name', 'summary', 'investor_pitch', 'pricing_tiers', 'testimonials'],
+            'required' => ['startup_name', 'summary', 'investor_pitch', 'price_tiers', 'testimonials'],
             'properties' => [
                 'startup_name' => [
                     'type' => 'string',
@@ -20,7 +20,7 @@ return [
                     'type' => 'string',
                     'maxLength' => 500,
                 ],
-                'pricing_tiers' => [
+                'price_tiers' => [
                     'type' => 'array',
                     'items' => [
                         'type' => 'object',

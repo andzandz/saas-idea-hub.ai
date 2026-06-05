@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Database\Factories\GeneratedIdeaFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,12 +19,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $summary
  * @property string $investor_pitch
  * @property string $model
- * @property int $public
- * @property-read Collection<int, \App\Models\GeneratedIdeaPriceTier> $priceTiers
+ * @property bool $public
+ * @property-read Collection<int, GeneratedIdeaPriceTier> $priceTiers
  * @property-read int|null $price_tiers_count
- * @property-read Collection<int, \App\Models\GeneratedIdeaTestimonial> $testimonials
+ * @property-read Collection<int, GeneratedIdeaTestimonial> $testimonials
  * @property-read int|null $testimonials_count
- * @property-read \App\Models\User $user
+ * @property-read User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GeneratedIdea newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GeneratedIdea newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GeneratedIdea query()
@@ -35,13 +38,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GeneratedIdea whereSummary($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GeneratedIdea whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|GeneratedIdea whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class GeneratedIdea extends Model
 {
+    /** @use HasFactory<GeneratedIdeaFactory> */
+    use HasFactory;
+
     public $guarded = [];
 
     public $with = ['priceTiers', 'testimonials'];
+
+    public $casts = [
+        'public' => 'boolean',
+    ];
 
     public function user(): BelongsTo
     {
