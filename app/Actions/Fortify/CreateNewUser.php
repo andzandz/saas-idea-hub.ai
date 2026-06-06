@@ -17,17 +17,17 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-    public function create(array $input): User
+    public function create( array $input ): User
     {
-        Validator::make($input, [
+        Validator::make( $input, [
             ...$this->profileRules(),
             'password' => $this->passwordRules(),
-        ])->validate();
+        ] )->validate();
 
-        return User::create([
-            'name' => $input['name'],
+        return User::create( [
+            'name' => $input['name'] . ' ' . $input['surname'],
             'email' => $input['email'],
             'password' => $input['password'],
-        ]);
+        ] );
     }
 }

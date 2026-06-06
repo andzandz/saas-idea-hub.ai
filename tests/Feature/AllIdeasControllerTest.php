@@ -7,24 +7,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class YourIdeasControllerTest extends TestCase
+class AllIdeasControllerTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function test_guests_are_redirected_to_the_login_page()
-    {
-        $response = $this->get( route( 'your-ideas' ) );
-        $response->assertRedirect( route( 'login' ) );
-    }
-
-    public function test_authenticated_users_can_visit_the_dashboard()
-    {
-        $user = User::factory()->create();
-        $this->actingAs( $user );
-
-        $response = $this->get( route( 'your-ideas' ) );
-        $response->assertOk();
-    }
 
     public function test_your_ideas_page_displays_your_ideas_newest_first()
     {
@@ -34,6 +19,7 @@ class YourIdeasControllerTest extends TestCase
             ->summary( 'Example Summary 1' )
             ->investorPitch( 'Investor Pitch 1' )
             ->model( 'openai/example-model-1' )
+            ->public( true )
             ->userId( $user->id )
             ->create();
 
@@ -53,6 +39,7 @@ class YourIdeasControllerTest extends TestCase
             ->summary( 'Example Summary 2' )
             ->investorPitch( 'Investor Pitch 2' )
             ->model( 'openai/example-model-2' )
+            ->public( false )
             ->userId( $user->id )
             ->create();
 
@@ -74,6 +61,7 @@ class YourIdeasControllerTest extends TestCase
             ->summary( 'Example Summary 3' )
             ->investorPitch( 'Investor Pitch 3' )
             ->model( 'openai/example-model-3' )
+            ->public( true )
             ->userId( $another_user->id )
             ->create();
 
@@ -88,19 +76,43 @@ class YourIdeasControllerTest extends TestCase
             'comment' => 'Example testimonial 3',
         ] );
 
-        $response = $this->actingAs( $user )->get( route( 'your-ideas' ) );
+        $generated_idea_4 = GeneratedIdea::factory()
+            ->startupName( 'Example Name 4' )
+            ->summary( 'Example Summary 4' )
+            ->investorPitch( 'Investor Pitch 4' )
+            ->model( 'openai/example-model-4' )
+            ->public( false )
+            ->userId( $another_user->id )
+            ->create();
+
+        $generated_idea_4->priceTiers()->create( [
+            'name' => 'Price Tier 4',
+            'price_cents' => 4900,
+            'description' => 'Tier 4 description',
+        ] );
+
+        $generated_idea_4->testimonials()->create( [
+            'author' => null,
+            'comment' => 'Example testimonial 4',
+        ] );
+
+        $response = $this->actingAs( $user )->get( route( 'all-ideas' ) );
         $response->assertSeeInOrder( [
-            'Example Name 2',
-            'Price Tier 2',
-            'Example testimonial 2',
+            'Example Name 3',
+            'Price Tier 3',
+            'Example testimonial 3',
 
             'Example Name 1',
             'Price Tier 1',
             'Example testimonial 1',
         ] );
 
-        $response->assertDontSee( 'Example Name 3' );
-        $response->assertDontSee( 'Price Tier 3' );
-        $response->assertDontSee( 'Price Tier 3' );
+        $response->assertDontSee( 'Example Name 2' );
+        $response->assertDontSee( 'Price Tier 2' );
+        $response->assertDontSee( 'Price Tier 2' );
+
+        $response->assertDontSee( 'Example Name 4' );
+        $response->assertDontSee( 'Price Tier 4' );
+        $response->assertDontSee( 'Price Tier 4' );
     }
 }

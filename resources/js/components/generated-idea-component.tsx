@@ -15,7 +15,7 @@ export default function GeneratedIdeaComponent({
     generated_idea: GeneratedIdea;
 }) {
     return (
-        <div className="mb-4 space-y-1.5 rounded-xl bg-gray-800 p-4">
+        <div className="mb-4 space-y-1.5 rounded-md bg-gray-300 p-4 shadow-md shadow-gray-400 dark:bg-gray-700 dark:shadow-gray-800">
             <div className="text-xl underline">
                 <strong>{generated_idea.startup_name}</strong>
             </div>
@@ -35,7 +35,7 @@ export default function GeneratedIdeaComponent({
                     {generated_idea.price_tiers.map((price_tier) => (
                         <div
                             key={price_tier.id}
-                            className="mb-1 rounded-md bg-gray-900 p-2"
+                            className="mb-1 rounded-sm bg-gray-200 p-2 dark:bg-gray-800"
                         >
                             <strong>{price_tier.name}</strong>: $
                             {(price_tier.price_cents / 100).toFixed(2)}
@@ -52,7 +52,7 @@ export default function GeneratedIdeaComponent({
                     {generated_idea.testimonials.map((testimonial) => (
                         <div
                             key={testimonial.id}
-                            className="rounded-md bg-gray-900 p-2"
+                            className="rounded-sm bg-gray-200 p-2 dark:bg-gray-800"
                         >
                             "{testimonial.comment}"
                             <br />
@@ -63,7 +63,10 @@ export default function GeneratedIdeaComponent({
             </div>
             <div>
                 Posted by <strong>{generated_idea.model}</strong> (suggested by{' '}
-                <strong>{generated_idea.user.name}</strong>)
+                <strong>{generated_idea.user.name}</strong>) on{' '}
+                {generated_idea.created_at
+                    .substring(0, 16)
+                    .replace('T', ' at ')}
             </div>
         </div>
     );
