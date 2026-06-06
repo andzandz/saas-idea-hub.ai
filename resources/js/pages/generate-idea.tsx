@@ -1,4 +1,4 @@
-import { Form, Head, useForm } from '@inertiajs/react';
+import { Form, Head, useForm, usePage } from '@inertiajs/react';
 import { generateIdea } from '@/routes';
 import { submit } from '@/routes/generate-idea';
 
@@ -13,10 +13,21 @@ export default function GenerateIdea() {
     });
 
     const { data, setData } = form;
+    const { flash } = usePage();
+    console.log(flash);
 
     return (
         <>
             <Head title="Generate" />
+            <div
+                className={
+                    'mt-8 mb-2 self-center rounded bg-red-800 px-4 py-4 text-center ' +
+                    (flash['idea-generation-error'] === true ? '' : 'hidden')
+                }
+            >
+                There was an error generating your idea, this has been logged.
+                Please try again later.
+            </div>
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <Form
                     method="POST"
@@ -69,7 +80,11 @@ export default function GenerateIdea() {
                                 id="model"
                                 name="model"
                                 className="bg-neutral-secondary-medium border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand placeholder:text-body mb-4 block w-full border px-3 py-2.5 text-sm shadow-xs"
+                                required
                             >
+                                <option value="" disabled selected>
+                                    Please select
+                                </option>
                                 <option value="openai/gpt-5.4-mini">
                                     OpenAI GPT 5.4 Mini
                                     {/*(Mar 2026)*/}
@@ -78,8 +93,8 @@ export default function GenerateIdea() {
                                     Anthropic Claude Haiku 4.5
                                     {/*(Oct 2025)*/}
                                 </option>
-                                <option value="google/gemini-3.5-flash">
-                                    Google Gemini 3.5 Flash
+                                <option value="google/gemini-3.1-flash-lite">
+                                    Google Gemini 3.1 Flash Lite
                                     {/*(May 2026)*/}
                                 </option>
                                 <option value="deepseek/deepseek-v4-flash">
@@ -97,10 +112,6 @@ export default function GenerateIdea() {
                                 <option value="meta-llama/llama-4-maverick">
                                     Meta Llama 4 Maverick
                                     {/*(Apr 2025)*/}
-                                </option>
-                                <option value="nvidia/nemotron-3-super-120b-a12b">
-                                    NVIDIA Nemotron 3 Super
-                                    {/*(Mar 2026)*/}
                                 </option>
                                 <option value="x-ai/grok-4.3">
                                     xAI Grok 4.3
