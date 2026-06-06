@@ -82,25 +82,14 @@ export default function GenerateIdea() {
                                 className="bg-neutral-secondary-medium border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand placeholder:text-body mb-4 block w-full border px-3 py-2.5 text-sm shadow-xs"
                                 required
                             >
-                                <option
-                                    value=""
-                                    disabled
-                                    selected
-                                    className="bg-neutral-secondary-medium text-heading"
-                                >
+                                <option value="" disabled selected>
                                     Please select
                                 </option>
-                                <option
-                                    value="openai/gpt-5.4-mini"
-                                    className="bg-neutral-secondary-medium text-heading"
-                                >
+                                <option value="openai/gpt-5.4-mini">
                                     OpenAI GPT 5.4 Mini
                                     {/*(Mar 2026)*/}
                                 </option>
-                                <option
-                                    value="anthropic/claude-haiku-4.5"
-                                    className="bg-neutral-secondary-medium text-heading"
-                                >
+                                <option value="anthropic/claude-haiku-4.5">
                                     Anthropic Claude Haiku 4.5
                                     {/*(Oct 2025)*/}
                                 </option>
