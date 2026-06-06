@@ -5,7 +5,11 @@ namespace Tests\Feature;
 use App\Models\GeneratedIdea;
 use App\Models\User;
 use App\Services\OpenRouterService;
+use ErrorException;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Exceptions;
+use Inertia\Testing\AssertableInertia;
 use Mockery;
 use Tests\TestCase;
 
@@ -87,7 +91,7 @@ class GenerateIdeaSubmitControllerTest extends TestCase
         $this->assertEquals( 'Example comment 2', $testimonials[1]->comment );
     }
 
-    public function test_generate_idea_route_calls_openrouter_and_saves_idea_model_when_not_public_notes_and_temperature_specified(): void
+    public function test_generate_idea_route_calls_openrouter_and_saves_idea_model_when_not_public_and_no_notes_and_temperature_specified(): void
     {
         $user = User::factory()->createOne();
 
@@ -158,5 +162,138 @@ class GenerateIdeaSubmitControllerTest extends TestCase
         $this->assertEquals( 'Example comment 1', $testimonials[0]->comment );
         $this->assertNull( $testimonials[1]->author );
         $this->assertEquals( 'Example comment 2', $testimonials[1]->comment );
+    }
+
+    public function test_generate_idea_route_redirects_back_to_generate_page_and_flashes_message_when_openrouter_service_throws_exception(): void
+    {
+        $user = User::factory()->createOne();
+
+        $example_exception = new Exception( 'example OpenRouter error' );
+        // $idea, ?string $notes, string $model, ?float $temperature
+        $this->mock( OpenRouterService::class )
+            ->shouldReceive( 'generateSaaSIdea' )
+            ->with(
+                Mockery::capture( $captured_idea ),
+                Mockery::capture( $captured_notes ),
+                Mockery::capture( $captured_model ),
+                Mockery::capture( $captured_temperature ),
+            )
+            ->andThrow( $example_exception );
+
+        $response = $this->actingAs( $user )
+            ->followingRedirects()
+            ->post( route( 'generate-idea.submit' ), [
+                'model' => 'openai/example',
+                'idea' => 'example idea',
+                'notes' => 'example notes',
+                'temperature' => '1.2',
+            ] );
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn ( AssertableInertia $page ) => $page
+                ->component( 'generate-idea' )
+                ->hasFlash( 'idea-generation-error', true )
+        );
+    }
+
+    public function test_generate_idea_route_reports_error_to_logging_stack_when_openrouter_service_throws_exception(): void
+    {
+        Exceptions::fake();
+        $user = User::factory()->createOne();
+
+        $example_exception = new Exception( 'example OpenRouter error' );
+        // $idea, ?string $notes, string $model, ?float $temperature
+        $this->mock( OpenRouterService::class )
+            ->shouldReceive( 'generateSaaSIdea' )
+            ->with(
+                Mockery::capture( $captured_idea ),
+                Mockery::capture( $captured_notes ),
+                Mockery::capture( $captured_model ),
+                Mockery::capture( $captured_temperature ),
+            )
+            ->andThrow( $example_exception );
+
+        $response = $this->actingAs( $user )
+            ->followingRedirects()
+            ->post( route( 'generate-idea.submit' ), [
+                'model' => 'openai/example',
+                'idea' => 'example idea',
+                'notes' => 'example notes',
+                'temperature' => '1.2',
+            ] );
+
+        $response->assertOk();
+
+        Exceptions::assertReported( Exception::class );
+    }
+
+    public function test_generate_idea_route_redirects_back_to_generate_page_and_flashes_message_when_database_store_error_due_to_invalid_json(): void
+    {
+        Exceptions::fake();
+        $user = User::factory()->createOne();
+
+        $example_exception = new Exception( 'example OpenRouter error' );
+        // $idea, ?string $notes, string $model, ?float $temperature
+        $this->mock( OpenRouterService::class )
+            ->shouldReceive( 'generateSaaSIdea' )
+            ->with(
+                Mockery::capture( $captured_idea ),
+                Mockery::capture( $captured_notes ),
+                Mockery::capture( $captured_model ),
+                Mockery::capture( $captured_temperature ),
+            )
+            ->andReturn( [
+                // Not a valid generated idea
+                'foo' => 'bar',
+            ] );
+
+        $response = $this->actingAs( $user )
+            ->followingRedirects()
+            ->post( route( 'generate-idea.submit' ), [
+                'model' => 'openai/example',
+                'idea' => 'example idea',
+                'notes' => 'example notes',
+                'temperature' => '1.2',
+            ] );
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn ( AssertableInertia $page ) => $page
+                ->component( 'generate-idea' )
+                ->hasFlash( 'idea-generation-error', true )
+        );
+    }
+
+    public function test_generate_idea_route_reports_error_to_logging_stack_when_database_store_error_due_to_invalid_json(): void
+    {
+        Exceptions::fake();
+        $user = User::factory()->createOne();
+
+        $this->mock( OpenRouterService::class )
+            ->shouldReceive( 'generateSaaSIdea' )
+            ->with(
+                Mockery::capture( $captured_idea ),
+                Mockery::capture( $captured_notes ),
+                Mockery::capture( $captured_model ),
+                Mockery::capture( $captured_temperature ),
+            )
+            ->andReturn( [
+                // Not a valid generated idea
+                'foo' => 'bar',
+            ] );
+
+        $response = $this->actingAs( $user )
+            ->followingRedirects()
+            ->post( route( 'generate-idea.submit' ), [
+                'model' => 'openai/example',
+                'idea' => 'example idea',
+                'notes' => 'example notes',
+                'temperature' => '1.2',
+            ] );
+
+        $response->assertOk();
+
+        Exceptions::assertReported( ErrorException::class );
     }
 }

@@ -27,6 +27,7 @@ class OpenRouterClient
                 ],
                 model: $model,
                 response_format: new ResponseFormatData( 'json_schema', $json_schema ),
+                max_tokens: 3000,
                 temperature: $temperature
             )
         );

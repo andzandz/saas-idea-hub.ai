@@ -67,8 +67,6 @@ class YourIdeasControllerTest extends TestCase
             'comment' => 'Example testimonial 2',
         ] );
 
-        $user = $user->fresh();
-
         $response = $this->actingAs( $user )->get( route( 'your-ideas' ) );
         $response->assertSeeInOrder( [
             'Example Name 2',

@@ -6,22 +6,31 @@ use App\Models\GeneratedIdea;
 use App\Services\OpenRouterService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Throwable;
 
 class GenerateIdeaSubmitController extends Controller
 {
     public function __invoke( Request $request )
     {
-        $idea = app( OpenRouterService::class )
-            ->generateSaaSIdea(
-                idea: $request->input( 'idea' ),
-                notes: $request->input( 'notes' ),
-                model: $request->input( 'model' ),
-                temperature: $request->input( 'use-default-temperature' ) !== 'true'
-                    ? $request->input( 'temperature' )
-                    : null,
-            );
+        try {
+            $idea = app( OpenRouterService::class )
+                ->generateSaaSIdea(
+                    idea: $request->input( 'idea' ),
+                    notes: $request->input( 'notes' ),
+                    model: $request->input( 'model' ),
+                    temperature: $request->input( 'use-default-temperature' ) !== 'true'
+                        ? $request->input( 'temperature' )
+                        : null,
+                );
+            $this->storeIdea( $idea, $request->input( 'model' ), $request->input( 'public' ) === 'true' );
+        } catch ( Throwable $throwable ) {
+            report( $throwable );
 
-        $this->storeIdea( $idea, $request->input( 'model' ), $request->input( 'public' ) === 'true' );
+            Inertia::flash( 'idea-generation-error', true );
+
+            return redirect()->route( 'generate-idea' );
+        }
 
         return redirect()->route( 'your-ideas' );
     }
