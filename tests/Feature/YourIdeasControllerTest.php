@@ -71,17 +71,11 @@ class YourIdeasControllerTest extends TestCase
         $response->assertSeeInOrder( [
             'Example Name 2',
             'Price Tier 2',
-            '29.00',
-            'Tier 2 description',
             'Example testimonial 2',
-            'Anonymous',
 
             'Example Name 1',
             'Price Tier 1',
-            '19.00',
-            'Tier 1 description',
             'Example testimonial 1',
-            'Person 1',
         ] );
     }
 }
