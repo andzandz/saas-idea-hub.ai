@@ -23,7 +23,7 @@ export default function YourIdeas({ generated_ideas }: DashboardProps) {
                 </div>
                 <div className="self-center">
                     <Link
-                        className="rounded-xl bg-green-700 px-4 py-2"
+                        className={`cursor-pointer rounded-xl bg-green-600 px-4 py-2 text-white dark:bg-green-700`}
                         href={generateIdea()}
                     >
                         Generate idea...

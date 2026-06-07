@@ -206,7 +206,7 @@ export default function GenerateIdea() {
                                 <div className="self-center">
                                     <button
                                         type="submit"
-                                        className={`rounded-xl px-4 py-2 ${processing ? 'bg-green-900' : 'cursor-pointer bg-green-700'}`}
+                                        className={`rounded-xl px-4 py-2 text-white ${processing ? 'bg-green-700 dark:bg-green-900' : 'cursor-pointer bg-green-600 dark:bg-green-700'}`}
                                     >
                                         {processing
                                             ? 'Generating...'
