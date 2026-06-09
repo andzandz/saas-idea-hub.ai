@@ -1,6 +1,5 @@
 import { Head } from '@inertiajs/react';
 import GeneratedIdeaComponent from '@/components/generated-idea-component';
-import { allIdeas } from '@/routes';
 import type { GeneratedIdea } from '@/types/generated_idea';
 
 interface ViewIdeaProps {

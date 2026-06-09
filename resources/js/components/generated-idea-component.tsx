@@ -1,7 +1,7 @@
-import type { GeneratedIdea } from '@/types/generated_idea';
-import { generateIdea, viewIdea } from '@/routes';
 import { Link } from '@inertiajs/react';
 import slugify from 'slugify';
+import { viewIdea } from '@/routes';
+import type { GeneratedIdea } from '@/types/generated_idea';
 
 const lgCols: Record<number, string> = {
     1: 'lg:grid-cols-1',
