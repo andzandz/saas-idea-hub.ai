@@ -21,7 +21,7 @@ export default function GeneratedIdeaComponent({
         <div className="mb-4 space-y-1.5 rounded-md bg-gray-300 p-4 shadow-md shadow-gray-400 dark:bg-gray-700 dark:shadow-gray-800">
             <div className="text-xl underline">
                 <Link
-                    className={`cursor-pointer dark:text-white`}
+                    className={``}
                     href={viewIdea({
                         generated_idea: generated_idea.id,
                         slug: slugify(generated_idea.startup_name, {
