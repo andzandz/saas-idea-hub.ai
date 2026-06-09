@@ -2,39 +2,16 @@
 
 namespace App\Clients;
 
-use GuzzleHttp\Exception\GuzzleException;
-use MoeMizrak\LaravelOpenrouter\DTO\ChatData;
-use MoeMizrak\LaravelOpenrouter\DTO\MessageData;
-use MoeMizrak\LaravelOpenrouter\DTO\ResponseFormatData;
-use MoeMizrak\LaravelOpenrouter\Facades\LaravelOpenRouter;
-use MoeMizrak\LaravelOpenrouter\Types\RoleType;
+use App\Agents\SaasGeneratorAgent;
+use Laravel\Ai\Responses\StructuredAgentResponse;
 
 class OpenRouterClient
 {
-    /**
-     * @throws \ReflectionException
-     * @throws GuzzleException
-     */
-    public function generateArrayWithSchema( string $prompt, string $model, array $json_schema, ?float $temperature = null ): array
+    public function generateArrayWithSchema( string $prompt, string $model, ?float $temperature = null ): array
     {
-        $chat_response = LaravelOpenRouter::chatRequest(
-            new ChatData(
-                messages: [
-                    new MessageData(
-                        content: $prompt,
-                        role: RoleType::USER,
-                    ),
-                ],
-                model: $model,
-                response_format: new ResponseFormatData( 'json_schema', $json_schema ),
-                max_tokens: 3000,
-                temperature: $temperature
-            )
-        );
+        /** @var StructuredAgentResponse $response */
+        $response = ( new SaasGeneratorAgent( $temperature ) )->prompt( $prompt, provider: 'openrouter', model: $model );
 
-        return json_decode(
-            $chat_response->choices[0]['message']['content'],
-            true
-        );
+        return $response->structured;
     }
 }

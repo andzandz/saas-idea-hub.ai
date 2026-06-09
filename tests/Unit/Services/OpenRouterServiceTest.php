@@ -16,7 +16,6 @@ class OpenRouterServiceTest extends TestCase
             ->with(
                 Mockery::capture( $captured_prompt ),
                 Mockery::capture( $captured_model ),
-                Mockery::capture( $captured_json_schema ),
                 Mockery::capture( $captured_temperature ),
             )
             ->andReturn( [
@@ -26,13 +25,8 @@ class OpenRouterServiceTest extends TestCase
         $service = new OpenRouterService;
         $result = $service->generateSaaSIdea( 'Netflix for professionals', null, 'openai/example-model', null );
 
-        $this->assertEquals(
-            'You are a SaaS (Software as a Service) Generator. Generate a startup name, summary (max 250 characters), price tiers, fake testimonials and investor pitch (max 500 characters) for:'
-            . PHP_EOL . 'Idea: Netflix for professionals',
-            $captured_prompt
-        );
+        $this->assertEquals( 'Idea: Netflix for professionals', $captured_prompt );
         $this->assertEquals( 'openai/example-model', $captured_model );
-        $this->assertEquals( config( 'saas-generator.json_schema' ), $captured_json_schema );
         $this->assertNull( $captured_temperature );
 
         $this->assertEquals( [
@@ -47,7 +41,6 @@ class OpenRouterServiceTest extends TestCase
             ->with(
                 Mockery::capture( $captured_prompt ),
                 Mockery::capture( $captured_model ),
-                Mockery::capture( $captured_json_schema ),
                 Mockery::capture( $captured_temperature ),
             )
             ->andReturn( [
@@ -58,13 +51,10 @@ class OpenRouterServiceTest extends TestCase
         $result = $service->generateSaaSIdea( 'Netflix for professionals', 'example notes', 'openai/example-model', 1.2 );
 
         $this->assertEquals(
-            'You are a SaaS (Software as a Service) Generator. Generate a startup name, summary (max 250 characters), price tiers, fake testimonials and investor pitch (max 500 characters) for:'
-            . PHP_EOL . 'Idea: Netflix for professionals'
-            . PHP_EOL . 'Notes: example notes',
+            'Idea: Netflix for professionals' . PHP_EOL . 'Notes: example notes',
             $captured_prompt
         );
         $this->assertEquals( 'openai/example-model', $captured_model );
-        $this->assertEquals( config( 'saas-generator.json_schema' ), $captured_json_schema );
         $this->assertSame( 1.2, $captured_temperature );
 
         $this->assertEquals( [
