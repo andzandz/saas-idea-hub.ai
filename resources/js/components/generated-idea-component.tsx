@@ -1,4 +1,7 @@
 import type { GeneratedIdea } from '@/types/generated_idea';
+import { generateIdea, viewIdea } from '@/routes';
+import { Link } from '@inertiajs/react';
+import slugify from 'slugify';
 
 const lgCols: Record<number, string> = {
     1: 'lg:grid-cols-1',
@@ -17,7 +20,18 @@ export default function GeneratedIdeaComponent({
     return (
         <div className="mb-4 space-y-1.5 rounded-md bg-gray-300 p-4 shadow-md shadow-gray-400 dark:bg-gray-700 dark:shadow-gray-800">
             <div className="text-xl underline">
-                <strong>{generated_idea.startup_name}</strong>
+                <Link
+                    className={`cursor-pointer dark:text-white`}
+                    href={viewIdea({
+                        generated_idea: generated_idea.id,
+                        slug: slugify(generated_idea.startup_name, {
+                            lower: true,
+                            strict: true,
+                        }),
+                    })}
+                >
+                    <strong>{generated_idea.startup_name}</strong>
+                </Link>
             </div>
             <div>
                 <strong>Summary:</strong>&nbsp;
