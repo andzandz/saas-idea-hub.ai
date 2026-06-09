@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GeneratedIdea;
-use App\Services\OpenRouterService;
+use App\Services\SaasGeneratorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -14,7 +14,7 @@ class GenerateIdeaSubmitController extends Controller
     public function __invoke( Request $request )
     {
         try {
-            $idea = app( OpenRouterService::class )
+            $idea = app( SaasGeneratorService::class )
                 ->generateSaaSIdea(
                     idea: $request->input( 'idea' ),
                     notes: $request->input( 'notes' ),
