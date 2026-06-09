@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "andzandz/ai-saas-hub",
+    "name": "andzandz/ai-saas-hub.ai",
     "type": "project",
     "description": "An AI SaaS Generator",
     "keywords": [],
