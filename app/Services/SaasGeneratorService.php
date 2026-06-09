@@ -16,7 +16,7 @@ class SaasGeneratorService
         }
 
         /** @var StructuredAgentResponse $response */
-        $response = ( new SaasGeneratorAgent( $temperature ) )->prompt( $prompt, provider: 'openrouter', model: $model );
+        $response = new SaasGeneratorAgent( $temperature )->prompt( $prompt, provider: 'openrouter', model: $model );
 
         return $response->structured;
     }
