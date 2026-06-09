@@ -9,12 +9,12 @@
         "php": "^8.5",
         "bugsnag/bugsnag-laravel": "^2.0",
         "inertiajs/inertia-laravel": "^3.0",
+        "laravel/ai": "^0.7.2",
         "laravel/chisel": "^0.1.0",
         "laravel/fortify": "^1.37.2",
         "laravel/framework": "^13.7",
         "laravel/tinker": "^3.0",
-        "laravel/wayfinder": "^0.1.14",
-        "moe-mizrak/laravel-openrouter": "^2.11"
+        "laravel/wayfinder": "^0.1.14"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.7",

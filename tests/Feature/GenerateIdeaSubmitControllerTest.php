@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\GeneratedIdea;
 use App\Models\User;
-use App\Services\OpenRouterService;
+use App\Services\SaasGeneratorService;
 use ErrorException;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,7 +22,7 @@ class GenerateIdeaSubmitControllerTest extends TestCase
         $user = User::factory()->createOne();
 
         // $idea, ?string $notes, string $model, ?float $temperature
-        $this->mock( OpenRouterService::class )
+        $this->mock( SaasGeneratorService::class )
             ->shouldReceive( 'generateSaaSIdea' )
             ->with(
                 Mockery::capture( $captured_idea ),
@@ -96,7 +96,7 @@ class GenerateIdeaSubmitControllerTest extends TestCase
         $user = User::factory()->createOne();
 
         // $idea, ?string $notes, string $model, ?float $temperature
-        $this->mock( OpenRouterService::class )
+        $this->mock( SaasGeneratorService::class )
             ->shouldReceive( 'generateSaaSIdea' )
             ->with(
                 Mockery::capture( $captured_idea ),
@@ -170,7 +170,7 @@ class GenerateIdeaSubmitControllerTest extends TestCase
 
         $example_exception = new Exception( 'example OpenRouter error' );
         // $idea, ?string $notes, string $model, ?float $temperature
-        $this->mock( OpenRouterService::class )
+        $this->mock( SaasGeneratorService::class )
             ->shouldReceive( 'generateSaaSIdea' )
             ->with(
                 Mockery::capture( $captured_idea ),
@@ -204,7 +204,7 @@ class GenerateIdeaSubmitControllerTest extends TestCase
 
         $example_exception = new Exception( 'example OpenRouter error' );
         // $idea, ?string $notes, string $model, ?float $temperature
-        $this->mock( OpenRouterService::class )
+        $this->mock( SaasGeneratorService::class )
             ->shouldReceive( 'generateSaaSIdea' )
             ->with(
                 Mockery::capture( $captured_idea ),
@@ -235,7 +235,7 @@ class GenerateIdeaSubmitControllerTest extends TestCase
 
         $example_exception = new Exception( 'example OpenRouter error' );
         // $idea, ?string $notes, string $model, ?float $temperature
-        $this->mock( OpenRouterService::class )
+        $this->mock( SaasGeneratorService::class )
             ->shouldReceive( 'generateSaaSIdea' )
             ->with(
                 Mockery::capture( $captured_idea ),
@@ -270,7 +270,7 @@ class GenerateIdeaSubmitControllerTest extends TestCase
         Exceptions::fake();
         $user = User::factory()->createOne();
 
-        $this->mock( OpenRouterService::class )
+        $this->mock( SaasGeneratorService::class )
             ->shouldReceive( 'generateSaaSIdea' )
             ->with(
                 Mockery::capture( $captured_idea ),
