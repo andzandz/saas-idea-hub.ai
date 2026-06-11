@@ -11,6 +11,8 @@ Register now to generate the spark!
 * Not serious enough to buy
   a [.ai domain](https://www.namecheap.com/domains/registration/results/?domain=saasideahub.ai)
 
+Feel free to try it at: [https://ideahub.andycknight.com](https://ideahub.andycknight.com)
+
 ## Project Purpose
 
 This project is primarily a learning exercise for Inertia, React, Sail, Docker, to try different AI LLM models, and for amusement. As such it is not quite as polished as my usual work.
